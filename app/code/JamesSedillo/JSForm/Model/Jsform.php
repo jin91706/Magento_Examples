@@ -1,17 +1,16 @@
 <?php
 namespace JamesSedillo\JSForm\Model;
 
-/* implements \Magento\Framework\DataObject\IdentityInterface */
-class Jsform extends \Magento\Framework\Model\AbstractModel 
+class Jsform extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
-    const CACHE_TAG = 'jamessedillo_jsform_jsform';
+    const CACHE_TAG = 'jsform';
 
     /**
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
      */
-    protected $_cacheTag = self::CACHE_TAG;
+    protected $_cacheTag = true;
 
     /**
      * Prefix of model events names
@@ -52,9 +51,8 @@ class Jsform extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    /*
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
-    }*/
+    }
 }

@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+    	<tab id="vnecoms" translate="label" sortOrder="101">
+            <label>VNECOMS</label>
+        </tab>
+        <!-- Credit section -->
+        <section id="customordernumber" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Custom Order Number</label>
+            <tab>vnecoms</tab>
+            <resource>Vnecoms_CustomOrderNumbert::configuration</resource>
+            <group id="general" translate="label tooltip" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>General</label>
+				<field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Enable Extension</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+	        	</field>
+			</group>
+            <group id="order" translate="label tooltip" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Order</label>
+				<field id="prefix" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Prefix</label>
+	        	</field>
+	        	<field id="suffix" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Suffix</label>
+	        	</field>
+	        	<field id="start_value" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Start Counter From</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	        	</field>
+	        	<field id="step" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Counter Increment Step</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<comment>E.g. the last number is 00000010, if the increment is 5, the next number will be  00000015</comment>
+	        	</field>
+	        	<field id="number_length" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Number Length</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<comment><![CDATA[Total number of digits in the order number. If counter value is 15 and Number Length is 9, the order number will be 000000015<br />Set to 0 (zero) if you don't want to add leading zeros to order number.]]></comment>
+	        	</field>
+	        	<field id="website_counter" translate="label" type="select" sortOrder="60" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Use Separated Counter For This Website</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+	        	</field>
+	        	<field id="store_counter" translate="label" type="select" sortOrder="70" showInDefault="0" showInWebsite="0" showInStore="1">
+					<label>Use Separated Counter For This Store</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+	        	</field>
+	        	<field id="reset_counter" translate="label" type="checkbox" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Reset counter</label>
+					<frontend_model>Vnecoms\CustomOrderNumber\Block\Adminhtml\System\Config\Form\Field\ResetCounter</frontend_model>
+					<backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\ResetCounter</backend_model>
+	        	</field>
+	        	<field id="auto_reset_counter" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auto Reset Counter</label>
+                    <source_model>Vnecoms\CustomOrderNumber\Model\Config\Source\Frequency</source_model>
+                    <backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\Counter</backend_model>
+                </field>
+	        	<comment><![CDATA[
+					<table cellspacing="0" class="form-list">
+					<tr id="row_customordernumber_order_prefix"><td class="label">Instruction</td>
+					<td class="value">
+	           			You can use these variables in <strong>Prefix</strong> and <strong>Suffix</strong>:<br />
+	           			<span style="display: inline-block; width: 50px;">{yyyy}</span>: A full numeric representation of a year, 4 digits<br />
+	           			<span style="display: inline-block; width: 50px;">{yy}</span>: A two digit representation of a year<br />
+	           			<span style="display: inline-block; width: 50px;">{mm}</span>: Numeric representation of a month, with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{m}</span>: Numeric representation of a month, without leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{dd}</span>: Day of the month, 2 digits with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{d}</span>: Day of the month without leading zeros<br />
+           			</td>
+           			<td class=""></td>
+           			</tr>
+           			</table>
+           		]]></comment>
+			</group>
+			<group id="invoice" translate="label tooltip" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Invoice</label>
+				
+				<field id="same_as_order" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Use same increment number as order</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment><![CDATA[If this option is set to yes, the invoice number will have same increment number as order.
+					<br />E.g. order ID is ORDPRE-000005-ORDSUF then the invoice number will be INVPRE-000005-INVSUF<br />
+					Set this option to Yes only when each of your order have only one invoice.]]></comment>
+	        	</field>
+				<field id="prefix" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Prefix</label>
+	        	</field>
+	        	<field id="suffix" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Suffix</label>
+	        	</field>
+	        	<field id="start_value" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Start Counter From</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="step" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Counter Increment Step</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	            	<comment>E.g. the last number is 00000010, if the increment is 5, the next number will be  00000015</comment>
+	        	</field>
+	        	<field id="number_length" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Number Length</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	            	<comment><![CDATA[Total number of digits in the order number. If counter value is 15 and Number Length is 9, the order number will be 000000015<br />Set to 0 (zero) if you don't want to add leading zeros to order number.]]></comment>
+	        	</field>
+	        	<field id="website_counter" translate="label" type="select" sortOrder="70" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Use Separated Counter For This Website</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="store_counter" translate="label" type="select" sortOrder="80" showInDefault="0" showInWebsite="0" showInStore="1">
+					<label>Use Separated Counter For This Store</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="reset_counter" translate="label" type="checkbox" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Reset counter</label>
+					<frontend_model>Vnecoms\CustomOrderNumber\Block\Adminhtml\System\Config\Form\Field\ResetCounter</frontend_model>
+					<backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\ResetCounter</backend_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="auto_reset_counter" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auto Reset Counter</label>
+                    <source_model>Vnecoms\CustomOrderNumber\Model\Config\Source\Frequency</source_model>
+                    <backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\Counter</backend_model>
+                    <depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+                </field>
+	        	<comment><![CDATA[
+					<table cellspacing="0" class="form-list">
+					<tr id="row_customordernumber_order_prefix"><td class="label">Instruction</td>
+					<td class="value">
+	           			You can use these variables in <strong>Prefix</strong> and <strong>Suffix</strong>:<br />
+	           			<span style="display: inline-block; width: 50px;">{yyyy}</span>: A full numeric representation of a year, 4 digits<br />
+	           			<span style="display: inline-block; width: 50px;">{yy}</span>: A two digit representation of a year<br />
+	           			<span style="display: inline-block; width: 50px;">{mm}</span>: Numeric representation of a month, with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{m}</span>: Numeric representation of a month, without leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{dd}</span>: Day of the month, 2 digits with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{d}</span>: Day of the month without leading zeros<br />
+           			</td>
+           			<td class=""></td>
+           			</tr>
+           			</table>
+           		]]></comment>
+			</group>
+			<group id="shipment" translate="label tooltip" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Shipment</label>
+				<field id="same_as_order" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Use same counter as order</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment><![CDATA[If this option is set to yes, the shipment number will have same increment number as order.<br />
+					E.g. order ID is ORDPRE-000005-ORDSUF then the shipment number will be SHIPRE-000005-SHISUF,
+					Set this option to Yes only when each of your order have only one shipment.]]></comment>
+	        	</field>
+				<field id="prefix" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Prefix</label>
+	        	</field>
+	        	<field id="suffix" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Suffix</label>
+	        	</field>
+	        	<field id="start_value" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Start Counter From</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="step" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Counter Increment Step</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	            	<comment>E.g. the last number is 00000010, if the increment is 5, the next number will be  00000015</comment>
+	        	</field>
+	        	<field id="number_length" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Number Length</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	            	<comment><![CDATA[Total number of digits in the order number. If counter value is 15 and Number Length is 9, the order number will be 000000015<br />Set to 0 (zero) if you don't want to add leading zeros to order number.]]></comment>
+	        	</field>
+	        	<field id="website_counter" translate="label" type="select" sortOrder="70" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Use Separated Counter For This Website</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="store_counter" translate="label" type="select" sortOrder="80" showInDefault="0" showInWebsite="0" showInStore="1">
+					<label>Use Separated Counter For This Store</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="reset_counter" translate="label" type="checkbox" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Reset counter</label>
+					<frontend_model>Vnecoms\CustomOrderNumber\Block\Adminhtml\System\Config\Form\Field\ResetCounter</frontend_model>
+					<backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\ResetCounter</backend_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="auto_reset_counter" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auto Reset Counter</label>
+                    <source_model>Vnecoms\CustomOrderNumber\Model\Config\Source\Frequency</source_model>
+                    <backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\Counter</backend_model>
+                    <depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+                </field>
+	        	<comment><![CDATA[
+					<table cellspacing="0" class="form-list">
+					<tr id="row_customordernumber_order_prefix"><td class="label">Instruction</td>
+					<td class="value">
+	           			You can use these variables in <strong>Prefix</strong> and <strong>Suffix</strong>:<br />
+	           			<span style="display: inline-block; width: 50px;">{yyyy}</span>: A full numeric representation of a year, 4 digits<br />
+	           			<span style="display: inline-block; width: 50px;">{yy}</span>: A two digit representation of a year<br />
+	           			<span style="display: inline-block; width: 50px;">{mm}</span>: Numeric representation of a month, with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{m}</span>: Numeric representation of a month, without leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{dd}</span>: Day of the month, 2 digits with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{d}</span>: Day of the month without leading zeros<br />
+           			</td>
+           			<td class=""></td>
+           			</tr>
+           			</table>
+           		]]></comment>
+			</group>
+			<group id="creditmemo" translate="label tooltip" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Credit Memo</label>
+				<field id="same_as_order" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Use same counter as order</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment><![CDATA[If this option is set to yes, the credit memo number will have same increment number as order.<br />
+					E.g. order ID is ORDPRE-000005-ORDSUF then the credit memo number will be CREPRE-000005-CRESUF,
+					Set this option to Yes only when each of your order have only one credit memo.]]></comment>
+	        	</field>
+				<field id="prefix" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Prefix</label>
+	        	</field>
+	        	<field id="suffix" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Suffix</label>
+	        	</field>
+	        	<field id="start_value" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Start Counter From</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="step" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Counter Increment Step</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	            	<comment>E.g. the last number is 00000010, if the increment is 5, the next number will be  00000015</comment>
+	        	</field>
+	        	<field id="number_length" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+	            	<label>Number Length</label>
+	            	<frontend_class>required-entry validate-digits</frontend_class>
+	            	<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	            	<comment><![CDATA[Total number of digits in the order number. If counter value is 15 and Number Length is 9, the order number will be 000000015<br />Set to 0 (zero) if you don't want to add leading zeros to order number.]]></comment>
+	        	</field>
+	        	<field id="website_counter" translate="label" type="select" sortOrder="70" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Use Separated Counter For This Website</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="store_counter" translate="label" type="select" sortOrder="80" showInDefault="0" showInWebsite="0" showInStore="1">
+					<label>Use Separated Counter For This Store</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="reset_counter" translate="label" type="checkbox" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Reset counter</label>
+					<frontend_model>Vnecoms\CustomOrderNumber\Block\Adminhtml\System\Config\Form\Field\ResetCounter</frontend_model>
+					<backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\ResetCounter</backend_model>
+					<depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+	        	</field>
+	        	<field id="auto_reset_counter" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auto Reset Counter</label>
+                    <source_model>Vnecoms\CustomOrderNumber\Model\Config\Source\Frequency</source_model>
+                    <backend_model>Vnecoms\CustomOrderNumber\Model\Config\Backend\Counter</backend_model>
+                    <depends>
+                        <field id="same_as_order">0</field>
+                    </depends>
+                </field>
+	        	<comment><![CDATA[
+					<table cellspacing="0" class="form-list">
+					<tr id="row_customordernumber_order_prefix"><td class="label">Instruction</td>
+					<td class="value">
+	           			You can use these variables in <strong>Prefix</strong> and <strong>Suffix</strong>:<br />
+	           			<span style="display: inline-block; width: 50px;">{yyyy}</span>: A full numeric representation of a year, 4 digits<br />
+	           			<span style="display: inline-block; width: 50px;">{yy}</span>: A two digit representation of a year<br />
+	           			<span style="display: inline-block; width: 50px;">{mm}</span>: Numeric representation of a month, with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{m}</span>: Numeric representation of a month, without leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{dd}</span>: Day of the month, 2 digits with leading zeros<br />
+	           			<span style="display: inline-block; width: 50px;">{d}</span>: Day of the month without leading zeros<br />
+           			</td>
+           			<td class=""></td>
+           			</tr>
+           			</table>
+           		]]></comment>
+			</group>
+		</section>
+        
+    </system>
+</config>
