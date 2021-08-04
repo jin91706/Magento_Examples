@@ -1,0 +1,24 @@
+
+<table>
+    <tr>
+        <td>Thumbnail</td>
+        <td>SKU</td>
+        <td>Name</td>
+        <td>Qty</td>
+        <td>Price</td>
+        <td>Link to product page</td>
+    </tr>
+<?php 
+    $products = $block->getProducts();
+    foreach ($products as $product) {
+        echo "<tr>";
+        echo "<td><img src=" . $block->getItemImage($product) ." /></td>";
+        echo "<td>". $product->getSku() ."</td>";
+        echo "<td>". $product->getName() . "</td>";
+        echo "<td>". $product->getQty() . "</td>";
+        echo "<td>". $block->getProductPrice($product) . "</td>";
+        echo "<td><a href=" . $product->getProductUrl() . " target='_blank'>" . $product->getName() . "</a></td>";
+        echo "</tr>";
+    }
+?>
+</table>

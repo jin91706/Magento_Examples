@@ -1,0 +1,71 @@
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <form name="form_value" method="POST" id="form_value">
+
+            <label>Low price</label>
+            <input type="number" step="0.01" name="priceone" class="form-control input-md" style="margin:20px;width:150px;" autocomplete="off" required>
+
+            <label>High price</label>
+            <input type="number" step="0.01" name="pricetwo" class="form-control input-md" style="margin:20px;width:150px;" autocomplete="off" required>
+
+            <label>Sort</label>
+            <select id="priceSort" style="margin:20px;width:75px;">
+                <option value="0" selected>ASC</option>
+                <option value="1">DESC</option>
+            </select>
+
+            <input type="submit" name="submit" value="Get Products">
+
+        </form>
+        <br/><br/>
+        Result<div class="result" style="display:none"></div>
+    </div>
+</div>
+
+<script>
+require(['jquery'],function(){
+    jQuery(document).ready(function() {
+        jQuery(".result").hide();
+        jQuery("#form_value").submit(function(){
+            
+            var oneValue = jQuery("input[name='priceone']").val();
+            var twoValue = jQuery("input[name='pricetwo']").val();
+            var sortVal = jQuery("#priceSort").val();
+
+            // Validation
+            if (parseFloat(oneValue) > parseFloat(twoValue)) {
+                alert("Low price can not be greater then High price");
+                return false;
+            }
+            if (parseFloat(oneValue) < 0 || parseFloat(twoValue) < 0) {
+                alert("Value can not be less then zero.");
+                return false;
+            }
+            var fivetimes = parseFloat(oneValue) * 5;
+            if (parseFloat(twoValue) > fivetimes) {
+                alert("High price can not be more then 5x greater then Low price");
+                return false;
+            }
+
+            var url = "<?php echo $block->getBaseUrl().'customproducts/result/result/' ?>";
+            jQuery.ajax({
+            url: url,
+            type: "POST",
+            data: {
+                priceone:oneValue,
+                pricetwo:twoValue,
+                sortVal:sortVal
+            },
+            showLoader: true,
+            cache: false,
+            success: function(response){
+                console.log(response.output);
+                jQuery(".result").show();
+                jQuery(".result").html(response.output);
+            }
+        });
+        return false;
+        });
+    });
+});
+</script>
